@@ -4,11 +4,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1256">
+<link href="/jsp/view/bootstrap.css" rel="stylesheet">
+<link rel="stylesheet" href="/jsp/view/normalize.css">
+<link rel="stylesheet" type="text/css" href="/jsp/view/backGround.css" />
 <title>Insert title here</title>
 </head>
 <body>
 <a href="/social/signup/">Sign up</a> <br>
-<p></p>
 <a href="/social/login/">Login</a> <br>
 </body>
 </html>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-app xmlns="http://java.sun.com/xml/ns/portlet
+/portlet-app_1_0.xsd"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:portlet="http://java.sun.com/xml/ns/portlet"
+xsi:schemaLocation="http://java.sun.com/xml/ns/portlet
+/portlet-app_1_0.xsd /opt/SUNWps/dtd/portlet.xsd" version="1.0">
+    <portlet>
+        <portlet-name>PrefPortlet</portlet-name>
+        <portlet-class>examples.PrefPortlet</portlet-class>
+        <expiration-cache>0</expiration-cache>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>EDIT</portlet-mode>
+            <portlet-mode>HELP</portlet-mode>
+        </supports>
+        <portlet-info>
+            <title>PrefPortlet</title>
+            <keywords>Hello, world, test</keywords>
+        </portlet-info>
+        <portlet-preferences>
+            <preference>
+                <name>name</name>
+                <value>World</value>
+            </preference>
+        </portlet-preferences>
+    </portlet>
+</portlet-app>

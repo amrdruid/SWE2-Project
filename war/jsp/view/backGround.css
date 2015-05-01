@@ -1,0 +1,10 @@
+body {
+background-image: url(http://fc07.deviantart.net/fs70/i/2012/089/7/3/gray_website_background_by_maruron-d4ugudv.jpg); /*You will specify your image path here.*/
+
+-moz-background-size: cover;
+-webkit-background-size: cover;
+background-size: cover;
+background-position: top center !important;
+background-repeat: no-repeat !important;
+background-attachment: fixed;
+}

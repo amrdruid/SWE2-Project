@@ -26,6 +26,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.FCI.SWE.Models.HashtagsManager;
+import com.FCI.SWE.Models.User;
+import com.FCI.SWE.Models.UserPost;
+import com.FCI.SWE.ServicesModels.PageEntity;
 import com.FCI.SWE.ServicesModels.UserEntity;
 
 /**
@@ -155,5 +159,87 @@ public class UserServices {
 		return object.toString();
 
 	}
+	
+	@POST
+	@Path("/timeline")
+	public String timeline(@FormParam("timeline") String timeline ) {
+		String uname = User.getCurrentActiveUser().getName();
+		//System.out.println("I entered here in service now ! - Email : " + timeline);
+		return UserPost.getAllPosts ( uname , timeline ) ;
+	}
+	
+	@POST
+	@Path("/createPost")
+	public String createPost( 
+						  @FormParam("content") String content ,
+						  @FormParam("privacy") String privacy , 
+						  @FormParam("feelings") String feelings ,
+						  @FormParam("timeline") String timeline) {
+		HashtagsManager.extractHashtags(content);
+		HashtagsManager.top10Hashtags();
+ 
+		Boolean creationCheck = false;
+		
+		String uname = User.getCurrentActiveUser().getName();
+		
+		System.out.println("Controller : " + uname);
+		
+		UserEntity user = UserEntity.searchSingleUser(uname);
+		
+		UserPost p = new UserPost( user );
+		p.content = content ;
+		p.privacy = privacy ;
+		p.feelings = feelings ;
+		p.timeline = timeline ;
 
+		creationCheck = p.savePost();
+
+		JSONObject obj = new JSONObject();
+
+		if ( creationCheck && user != null )
+			obj.put("status", "ok");
+		
+		else
+			obj.put("status", "failed");
+
+		return obj.toJSONString();
+	}
+	
+	@POST
+	@Path("/createPage")
+	public String createPage( 
+			  @FormParam("name") String name ,
+			  @FormParam("cat") String cat ) {
+		
+		String uname = User.getCurrentActiveUser().getName();
+		System.out.println(uname);
+		
+		UserEntity user = UserEntity.searchSingleUser(uname);
+		PageEntity pg = new PageEntity();
+		String creationCheck = "/";
+		
+		pg.cat=cat;
+		pg.name=name;
+		pg.owner=user;
+		pg.savePage();
+		creationCheck = pg.savePage();
+
+		JSONObject obj = new JSONObject();
+
+		if ( creationCheck.equals("OK") && user != null )
+			obj.put("status", "ok");
+		
+		else
+			obj.put("status", "failed");
+
+		return obj.toJSONString();
+	}
+	
+	@POST
+	@Path("/like")
+	public void like( @FormParam("key") String key , @FormParam("timeline") String pageName ) {
+		UserPost.like ( key , pageName ) ;
+	}
+	
+	
 }

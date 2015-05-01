@@ -160,6 +160,22 @@ public class UserEntity {
 		return true;
 
 	}
+	
+	public Boolean saveMessage(String from , String to , String message){
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+		
+		Query gaeQuery = new Query("users");
+		PreparedQuery pq = datastore.prepare(gaeQuery);
+		
+		Entity employee = new Entity("messages");
+		employee.setProperty("From", from);
+		employee.setProperty("To" , to);
+		employee.setProperty("Message", message);
+		
+		return true;
+	}
+	
 	public static Boolean search(String email,String from) {
 		//System.out.print(email);
 		DatastoreService datastore = DatastoreServiceFactory
@@ -183,6 +199,32 @@ public class UserEntity {
 			
 		}
 		return false ;		
+	}
+	
+	public static UserEntity searchSingleUser(String uname) {
+		
+		DatastoreService dataStore = DatastoreServiceFactory
+				.getDatastoreService();
+		
+		Query gae = new Query("users");
+		PreparedQuery preparedQuery = dataStore.prepare(gae);
+		
+		for (Entity entity : preparedQuery.asIterable()) {
+			
+			entity.getKey().getId();
+			String currentName = entity.getProperty("name").toString();
+			
+			if (currentName.equals(uname)) {
+				
+				UserEntity returnedUser = new UserEntity(entity.getProperty("name").toString(),
+						entity.getProperty("email").toString(), entity
+								.getProperty("password").toString());
+				
+				return returnedUser;
+			}
+		}
+		
+		return null;
 	}
 	
 	public static UserEntity view(String email) {
@@ -222,6 +264,37 @@ public class UserEntity {
 			
 		}
 		return false ;		
+	}
+	
+	public static boolean isFriend ( String uname , String fname ) {
+		
+		//System.out.println("userentity");
+		
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+		
+		Query gaeQuery = new Query("requests");
+		
+		PreparedQuery pq = datastore.prepare(gaeQuery);
+		
+		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
+
+		for (Entity entity : pq.asIterable()) {
+			
+			if ( (entity.getProperty("from").toString().equals(uname)
+			  && entity.getProperty("to").toString().equals(fname)
+			  && entity.getProperty("statues").toString().equals("accept") ) 
+			  || (entity.getProperty("to").toString().equals(fname)
+			  && entity.getProperty("from").toString().equals(uname)
+			  && entity.getProperty("statues").toString().equals("accept") )
+			  || (uname.equals(fname) == true)
+			  ) {
+			
+				return true ;
+			}
+		}
+		
+		return false ;
 	}
 	
 }
